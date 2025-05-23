@@ -13,6 +13,7 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
   const address = document.getElementById('address').value.trim();
   const job = document.getElementById('job').value.trim();
   const projects = document.getElementById('projects').value;
+  const photoFile = document.getElementById('photo').files[0];
 
   const validation = validateSignupForm({ email, password, username, phone, address, job, projects });
   if (!validation.isValid) {
@@ -33,46 +34,36 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
 
     if (authError) throw new Error(authError.message);
 
-    if (!authData.session) {
-      alert('Please disable email confirmation in Supabase settings! 📧');
-      submitButton.textContent = originalText;
-      submitButton.disabled = false;
-      return;
-    }
+    let photoUrl = null;
 
+await supabase.storage
+  .from('profile-photos')
+  .upload(photoFile.name, photoFile);
+
+const { data } = supabase.storage
+  .from('profile-photos')
+  .getPublicUrl(photoFile.name);
+
+photoUrl = data.publicUrl;
     const userData = {
       id: authData.user.id,
-      username, email, phone, address, job,
+      username,
+      email,
+      phone,
+      address,
+      job,
       projects: parseInt(projects),
-      created_at: new Date().toISOString()
+      photo_url: photoUrl
     };
 
-    const photoInput = document.getElementById('photo');
-    if (photoInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        userData.photo_url = e.target.result;
-        await saveProfile(userData);
-      };
-      reader.readAsDataURL(photoInput.files[0]);
-    } else {
-      await saveProfile(userData);
-    }
+    const { error } = await supabase.from('profiles').insert([userData]);
+    if (error) throw new Error(error.message);
 
-    async function saveProfile(data) {
-      try {
-        const { error } = await supabase.from('profiles').insert([data]);
-        if (error) localStorage.setItem('userData', JSON.stringify(data));
-      } catch {
-        localStorage.setItem('userData', JSON.stringify(data));
-      }
-
-      alert('Welcome aboard! 🎉 Taking you to login...');
-      setTimeout(() => window.location.href = 'login.html', 1000);
-    }
+    alert('Welcome. Taking you to login...');
+    setTimeout(() => window.location.href = 'login.html', 1000);
 
   } catch (error) {
-    alert(`Oops! Something went wrong: ${error.message} 😅`);
+    alert(`Oops! Something went wrong: ${error.message}`);
     submitButton.textContent = originalText;
     submitButton.disabled = false;
   }
@@ -82,17 +73,16 @@ function validateSignupForm(data) {
   const { email, password, username, phone, address, job, projects } = data;
 
   if (!email || !password || !username || !phone || !address || !job || projects === '') {
-    return { isValid: false, message: 'Please fill in all the fields! 📝' };
+    return { isValid: false, message: 'Please fill in all the fields!' };
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { isValid: false, message: 'Please enter a valid email address 📧' };
+    return { isValid: false, message: 'Please enter a valid email address' };
   }
 
   if (password.length < 6) {
-    return { isValid: false, message: 'Password needs at least 6 characters 🔒' };
+    return { isValid: false, message: 'Password needs at least 6 characters' };
   }
 
   return { isValid: true };
 }
-

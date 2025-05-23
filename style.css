@@ -210,8 +210,11 @@ body {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-image: url("WhatsApp Image 2025-04-11 at 14.41.59_2967177b.jpg");
+  background-color: #f0f0f0;
   background-size: cover;
+  background-position: center;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .profile-content {
