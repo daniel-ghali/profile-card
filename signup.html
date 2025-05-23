@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-signup"></div>
+    <div class="container">
+        <div class="signup-card">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="username">Username: <span class="required">*</span></label>
+                        <input type="text" id="username" name="username" required placeholder="Your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email: <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password: <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required placeholder="Min 6 characters">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number: <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label for="job">Job Title: <span class="required">*</span></label>
+                        <input type="text" id="job" name="job" required placeholder="Software Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="projects">Projects: <span class="required">*</span></label>
+                        <input type="number" id="projects" name="projects" required min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="address">Address: <span class="required">*</span></label>
+                    <input type="text" id="address" name="address" required placeholder="Your full address">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="photo">Profile Photo:</label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                </div>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/signup.js" type="module"></script>
+</html>
